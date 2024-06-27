@@ -13,21 +13,26 @@ BOTPW = os.getenv("LEMMY_PW", 0)
 BOTINSTANCE = os.getenv("LEMMY_INSTANCE", 0)
 APIUSER = os.getenv("API_USER", 0)
 APISECRET = os.getenv("API_SECRET", 0)
+MODULES = os.getenv("MODULES", 0)
 
-def main(user, pw, inst, apiuser, apisecret):
+def main(user, pw, inst, apiuser, apisecret, modules):
 
     lemmy = lem.login(inst, user, pw)
     if lemmy is None:
       sys.exit(1)
 
-    aireport.run(lemmy, user, inst, apiuser, apisecret, True)
-    toxiccomment.run(lemmy, apiuser, apisecret, True)
-    return "aireportbot"
+    mods = modules.split(',')
+    if "no_ai_images" in mods:
+      aireport.run(lemmy, user, inst, apiuser, apisecret, True)
+
+    if "check_comments" in mods:
+      toxiccomment.run(lemmy, apiuser, apisecret, True)
+    return "lemmy-sightengine"
 
 # Start script
 if __name__ == "__main__":
     try:
-        main(BOTUSER, BOTPW, BOTINSTANCE, APIUSER, APISECRET)
+        main(BOTUSER, BOTPW, BOTINSTANCE, APIUSER, APISECRET, MODULES)
     except Exception as err:
         message = (
             f"Task #{TASK_INDEX}, " + f"Attempt #{TASK_ATTEMPT} failed: {str(err)}"
