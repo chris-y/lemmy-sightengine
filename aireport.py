@@ -63,18 +63,17 @@ def run(lemmy, user, instance, apiuser, apisecret, live):
         else:
           continue
 
-        if live:
-          try:
-            lemmy.post.mark_as_read(p["post"]["id"], True)
-          except Exception as e:
-            print(f'cannot mark as read: {e}\n')
-
       if live:
         if examined_urls[p["post"]["url"]] >= 0.5:
           try:
             lemmy.report(p["post"]["id"], f'Suspected AI {examined_urls[p["post"]["url"]]}') # raise report
           except Exception as e:
             print("unable to raise report: {e}")
+
+          try:
+            lemmy.post.mark_as_read(p["post"]["id"], True)
+          except Exception as e:
+            print(f'cannot mark as read: {e}\n')
 
   if live:
     firestore.set("aireports", doc, examined_urls)
