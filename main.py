@@ -3,6 +3,7 @@ import os
 import aireport
 import toxiccomment
 import lem
+import downvotes
 
 # Retrieve Job-defined env vars
 TASK_INDEX = os.getenv("CLOUD_RUN_TASK_INDEX", 0)
@@ -24,6 +25,9 @@ def main(user, pw, inst, apiuser, apisecret, modules):
     mods = modules.split('|')
     if "no_ai_images" in mods:
       aireport.run(lemmy, user, inst, apiuser, apisecret, True)
+
+    if "downvotes" in mods:
+      downvotes.run(lemmy, True)
 
     if "check_comments" in mods:
       toxiccomment.run(lemmy, apiuser, apisecret, True)
