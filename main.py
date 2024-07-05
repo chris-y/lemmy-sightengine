@@ -21,7 +21,7 @@ def main(user, pw, inst, apiuser, apisecret, modules):
     if lemmy is None:
       sys.exit(1)
 
-    mods = modules.split(',')
+    mods = modules.split('|')
     if "no_ai_images" in mods:
       aireport.run(lemmy, user, inst, apiuser, apisecret, True)
 
