@@ -36,7 +36,7 @@ def run(lemmy, user, instance, apiuser, apisecret, live):
   posts = mposts #+ cposts
 
   for p in posts:
-    if p["read"] is True:
+    if p["hidden"] is True:
       break
       
     if "url" in p["post"]:
@@ -71,9 +71,9 @@ def run(lemmy, user, instance, apiuser, apisecret, live):
             print("unable to raise report: {e}")
 
           try:
-            lemmy.post.mark_as_read(p["post"]["id"], True)
+            lemmy.post.hide(p["post"]["id"], True)
           except Exception as e:
-            print(f'cannot mark as read: {e}\n')
+            print(f'cannot hide post: {e}\n')
 
   if live:
     firestore.set("aireports", doc, examined_urls)

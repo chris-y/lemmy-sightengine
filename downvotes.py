@@ -28,7 +28,7 @@ def run(lemmy, live):
   posts = mposts #+ cposts
 
   for p in posts:
-    if p["read"] is True:
+    if p["hidden"] is True:
       break
 
     if p['counts']['score'] < threshold:
@@ -39,8 +39,8 @@ def run(lemmy, live):
           print("unable to raise report: {e}")
           return
         try:
-          lemmy.post.mark_as_read(p["post"]["id"], True)
+          lemmy.post.hide(p["post"]["id"], True)
         except Exception as e:
-          print(f'cannot mark as read: {e}\n')
+          print(f'cannot hide post: {e}\n')
 
   return
